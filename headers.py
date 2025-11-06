@@ -47,3 +47,6 @@ class Header:
             self.flags                
             )
 
+    def Pack_Init(self):
+        self.msg_type = 2
+        return self.Pack_Message()
