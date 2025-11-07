@@ -1,7 +1,16 @@
 import socket as skt
 from headers import Header
-import csv , time
+import csv, time
 from globals import client_IP, client_port, server_IP, server_port
+import signal
+
+running = True
+
+def stop(sig, frame):
+    global running
+    running = False
+
+signal.signal(signal.SIGINT, stop)
 
 server_socket = skt.socket(family=skt.AF_INET, type=skt.SOCK_DGRAM)
 server_socket.bind((server_IP, server_port))
@@ -11,8 +20,8 @@ print(f"[SERVER] Listening on UDP {server_IP}:{server_port}...\n")
 temp_csv = open('temp.csv', 'w', newline='')
 writer = csv.writer(temp_csv)
 
-# ✅ Corrected header (added duplicate_flag + gap_flag)
-writer.writerow(['device_id', 'seq_num', 'timestamp', 'msg_type', 'value', 'duplicate_flag', 'gap_flag','arival_time'])
+# CSV header (will only contain DATA packets)
+writer.writerow(['device_id', 'seq_num', 'timestamp', 'value', 'duplicate_flag', 'gap_flag', 'arrival_time'])
 
 packet_count = 0
 bytes_total = 0
@@ -22,7 +31,7 @@ loss_count = 0
 last_seq = {}
 
 try:
-    while True:
+    while running:
         packet, address = server_socket.recvfrom(1024)
         if len(packet) < Header.Size:
             print("[SERVER] Invalid packet size\n")
@@ -40,15 +49,17 @@ try:
         duplicate_flag = 0
         gap_flag = 0
 
-        if dev in last_seq:
-            if seq == last_seq[dev]:
-                duplicate_flag = 1
-                dup_count += 1
-            elif seq > last_seq[dev] + 1:
-                gap_flag = 1
-                loss_count += 1
+        # ✅ Only track sequence, loss, duplicate if it's DATA
+        if header.msg_type == 1:
+            if dev in last_seq:
+                if seq == last_seq[dev]:
+                    duplicate_flag = 1
+                    dup_count += 1
+                elif seq > last_seq[dev] + 1:
+                    gap_flag = 1
+                    loss_count += 1
 
-        last_seq[dev] = seq
+            last_seq[dev] = seq
 
         payload = packet[Header.Size:]
         value = payload.decode(errors='ignore')
@@ -56,6 +67,7 @@ try:
         packet_count += 1
         bytes_total += len(packet)
 
+        # ✅ Keep prints exactly as you had them
         if header.msg_type == 0:
             print(f"[SERVER] HEARTBEAT from {dev}, time={header.timestamp}\n")
         elif header.msg_type == 2:
@@ -63,8 +75,10 @@ try:
         else:
             print(f"[SERVER] DATA from {dev} seq={seq}, value={value}, flags={header.flags}, time={header.timestamp}\n")
 
-        writer.writerow([dev, seq, header.timestamp, header.msg_type, value, duplicate_flag, gap_flag,ts])
-        temp_csv.flush()
+        # ✅ Write to CSV ONLY if it's DATA
+        if header.msg_type == 1:
+            writer.writerow([dev, seq, header.timestamp, header.msg_type, value, duplicate_flag, gap_flag, ts])
+            temp_csv.flush()
 
 except KeyboardInterrupt:
     print("\n\n[SERVER] Keyboard interrupt received. Shutting down...")
