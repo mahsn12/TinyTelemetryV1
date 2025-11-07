@@ -10,7 +10,7 @@ class Header:
         self.seq_num = seq_num
         self.msg_type = msg_type
         self.flags = flags
-        self.timestamp = int(time.time()) % 65536
+        self.timestamp = int(time.time())
 
     def Pack_Message(self):
         return struct.pack(

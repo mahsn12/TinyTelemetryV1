@@ -1,6 +1,6 @@
 import socket as skt
 from headers import Header
-import csv
+import csv , time
 from globals import client_IP, client_port, server_IP, server_port
 
 server_socket = skt.socket(family=skt.AF_INET, type=skt.SOCK_DGRAM)
@@ -12,7 +12,7 @@ temp_csv = open('temp.csv', 'w', newline='')
 writer = csv.writer(temp_csv)
 
 # ✅ Corrected header (added duplicate_flag + gap_flag)
-writer.writerow(['device_id', 'seq_num', 'timestamp', 'msg_type', 'value', 'duplicate_flag', 'gap_flag'])
+writer.writerow(['device_id', 'seq_num', 'timestamp', 'msg_type', 'value', 'duplicate_flag', 'gap_flag','arival_time'])
 
 packet_count = 0
 bytes_total = 0
@@ -30,7 +30,7 @@ try:
 
         header = Header()
         header.unPack(packet[:Header.Size])
-
+        ts = time.time()
         if header.flags != 1 and header.msg_type == 1:
             continue
 
@@ -57,13 +57,13 @@ try:
         bytes_total += len(packet)
 
         if header.msg_type == 0:
-            print(f"[SERVER] HEARTBEAT from {dev} seq={seq}, recv={header.timestamp}\n")
+            print(f"[SERVER] HEARTBEAT from {dev}, time={header.timestamp}\n")
         elif header.msg_type == 2:
-            print(f"[SERVER] INIT from {dev} seq={seq}, value={value}, flags={header.flags}, recv={header.timestamp}\n")
+            print(f"[SERVER] INIT from {dev} , time={header.timestamp}\n")
         else:
-            print(f"[SERVER] DATA from {dev} seq={seq}, value={value}, flags={header.flags}, recv={header.timestamp}\n")
+            print(f"[SERVER] DATA from {dev} seq={seq}, value={value}, flags={header.flags}, time={header.timestamp}\n")
 
-        writer.writerow([dev, seq, header.timestamp, header.msg_type, value, duplicate_flag, gap_flag])
+        writer.writerow([dev, seq, header.timestamp, header.msg_type, value, duplicate_flag, gap_flag,ts])
         temp_csv.flush()
 
 except KeyboardInterrupt:
