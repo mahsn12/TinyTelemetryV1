@@ -11,10 +11,11 @@ client_socket.bind((client_IP, client_port))
 
 init_header = Header(device_id=101, seq_num=0, msg_type=2)
 init_packet = init_header.Pack_Init()
-
+#print(init_header.msg_type)
 
 client_socket.sendto(init_packet, (server_IP, server_port))
 print(f"[INFO] Running client (device {device_id})...")
+
 
 def send_heartbeat():
     seq = 1
@@ -40,5 +41,5 @@ while True:
     packet += payload
     client_socket.sendto(packet, (server_IP, server_port))
     print(f"[CLIENT] Sent DATA seq={sequence_number}, value={payload_value:.2f}")
-    sequence_number += 1
+    sequence_number += 2
     time.sleep(6)

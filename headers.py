@@ -19,7 +19,7 @@ class Header:
             self.seq_num,
             self.timestamp,
             1,#message type
-            self.flags
+            1
              )
     
 
@@ -48,5 +48,11 @@ class Header:
             )
 
     def Pack_Init(self):
-        self.msg_type = 2
-        return self.Pack_Message()
+        return struct.pack(
+        Header.Format,
+        self.device_id,
+        self.seq_num,
+        self.timestamp,
+        2,#message type
+        self.flags 
+        )
