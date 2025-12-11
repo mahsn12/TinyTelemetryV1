@@ -20,6 +20,7 @@ def send_heartbeat(client_obj):
         time.sleep(30)
 
 
+
 def client_thread(Client_obj):
     seq_num = 0
 
@@ -53,6 +54,35 @@ def client_thread(Client_obj):
         packet = header_bytes + data_bytes
 
         Client_obj.sock.sendto(packet, (server_IP, server_port))
+        
+        # if(danger_flag == 1):
+        #     while True:
+        #         Client_obj.sock.settimeout(8)  # wait max 8 seconds for ACK
+        #         ack_packet, addr = Client_obj.sock.recvfrom(1024)
+        # 
+        #         if addr[0] == server_IP and addr[1] == server_port:
+        #             ack_value = int.from_bytes(ack_packet, byteorder="big")
+        #             
+        #             if ack_value == 1:
+        #                 print(f"[CLIENT {Client_obj.device_id}] Received VALID ACK from server")
+        #                 break
+        # 
+        #         else:
+        #              header = Header(
+        #             device_id=Client_obj.device_id,
+        #             seq_num=seq_num,
+        #             flags=danger_flag,
+        #             msg_type=1
+        #         )
+        # 
+        #         header_bytes = header.Pack_Message()
+        #         data_bytes = struct.pack('!H', data)
+        # 
+        #         packet = header_bytes + data_bytes
+        # 
+        #         Client_obj.sock.sendto(packet, (server_IP, server_port))       
+
+
         print(f"[CLIENT {Client_obj.device_id}] Sent DATA seq={seq_num}, value={data}, flag={danger_flag}")
 
         seq_num += 1
