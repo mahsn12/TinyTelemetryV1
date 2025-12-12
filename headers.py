@@ -18,8 +18,8 @@ class Header:
             self.device_id,
             self.seq_num,
             self.timestamp,
-            1,#message type
-            1
+            self.msg_type,#message type
+            self.flags
              )
     
 

@@ -1,0 +1,97 @@
+[SERVER] Listening on UDP 127.0.0.2:8888...
+
+[SERVER] INIT from 102, time=1765568672
+
+[SERVER] INIT from 103, time=1765568672
+
+[SERVER] INIT from 101, time=1765568672
+
+[SERVER] DATA from 102 seq=0, value=20, time=1765568674, danger_flag=0
+
+[SERVER] DATA from 103 seq=0, value=45, time=1765568674, danger_flag=0
+
+[SERVER] DATA from 101 seq=0, value=38, time=1765568674, danger_flag=0
+
+[SERVER] Sent ACK to device 102
+[SERVER] DATA from 102 seq=1, value=101, time=1765568678, danger_flag=1
+
+[SERVER] DATA from 103 seq=1, value=7, time=1765568678, danger_flag=0
+
+[SERVER] DATA from 101 seq=1, value=35, time=1765568678, danger_flag=0
+
+[SERVER] HEARTBEAT from 102, time=1765568679
+
+[SERVER] HEARTBEAT from 103, time=1765568679
+
+[SERVER] HEARTBEAT from 101, time=1765568679
+
+[SERVER] DATA from 102 seq=2, value=46, time=1765568682, danger_flag=0
+
+[SERVER] DATA from 103 seq=2, value=47, time=1765568682, danger_flag=0
+
+[SERVER] DATA from 101 seq=2, value=35, time=1765568682, danger_flag=0
+
+[SERVER] Sent ACK to device 102
+[SERVER] DATA from 102 seq=3, value=69, time=1765568686, danger_flag=1
+
+[SERVER] DATA from 103 seq=3, value=17, time=1765568686, danger_flag=0
+
+[SERVER] Sent ACK to device 101
+[SERVER] DATA from 101 seq=3, value=108, time=1765568686, danger_flag=1
+
+[SERVER] DATA from 102 seq=4, value=8, time=1765568690, danger_flag=0
+
+[SERVER] DATA from 103 seq=4, value=1, time=1765568690, danger_flag=0
+
+[SERVER] DATA from 101 seq=4, value=10, time=1765568693, danger_flag=0
+
+[SERVER] DATA from 103 seq=5, value=9, time=1765568694, danger_flag=0
+
+[SERVER] DATA from 102 seq=5, value=42, time=1765568694, danger_flag=0
+
+[SERVER] DATA from 101 seq=5, value=33, time=1765568697, danger_flag=0
+
+[SERVER] DATA from 103 seq=6, value=31, time=1765568698, danger_flag=0
+
+[SERVER] DATA from 102 seq=6, value=31, time=1765568698, danger_flag=0
+
+[SERVER] DATA from 101 seq=6, value=19, time=1765568701, danger_flag=0
+
+[SERVER] DATA from 103 seq=7, value=34, time=1765568702, danger_flag=0
+
+[SERVER] Sent ACK to device 102
+[SERVER] DATA from 102 seq=7, value=75, time=1765568702, danger_flag=1
+
+[SERVER] DATA from 101 seq=7, value=38, time=1765568705, danger_flag=0
+
+[SERVER] DATA from 103 seq=8, value=33, time=1765568706, danger_flag=0
+
+[SERVER] DATA from 102 seq=8, value=6, time=1765568706, danger_flag=0
+
+[SERVER] HEARTBEAT from 103, time=1765568709
+
+[SERVER] HEARTBEAT from 102, time=1765568709
+
+[SERVER] HEARTBEAT from 101, time=1765568709
+
+[SERVER] DATA from 101 seq=8, value=1, time=1765568709, danger_flag=0
+
+[SERVER] DATA from 103 seq=9, value=47, time=1765568710, danger_flag=0
+
+[SERVER] DATA from 102 seq=9, value=40, time=1765568710, danger_flag=0
+
+[SERVER] Sent ACK to device 101
+[SERVER] DATA from 101 seq=9, value=106, time=1765568713, danger_flag=1
+
+[METRIC] bytes_per_report = 14.00 bytes
+
+[METRIC] packets_received = 30
+
+[METRIC] Packets lost = 0
+
+[METRIC] packets duplicated = 0
+
+[METRIC] CPU_MS_PER_REPORT = 0.08653280000000124
+
+[SERVER] Shutdown complete.
+

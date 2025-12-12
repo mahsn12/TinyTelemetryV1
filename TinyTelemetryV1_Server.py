@@ -1,26 +1,25 @@
 import socket as skt
 from headers import Header
-import csv, time
+import csv, time , struct
 from globals import client_IP, client_port, server_IP, server_port
 import signal
 
-running = True
+RUN_DURATION = 55
 
-def stop(sig, frame):
-    global running
-    running = False
-
-signal.signal(signal.SIGINT, stop)
 
 server_socket = skt.socket(family=skt.AF_INET, type=skt.SOCK_DGRAM)
 server_socket.bind((server_IP, server_port))
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+server_socket.settimeout(0.5)      # <── ONLY ADDITION #1
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 print(f"[SERVER] Listening on UDP {server_IP}:{server_port}...\n")
 
 temp_csv = open('temp.csv', 'w', newline='')
 writer = csv.writer(temp_csv)
 
-# CSV header (will only contain DATA packets)
+# CSV header
 writer.writerow(['device_id', 'seq_num', 'timestamp', 'value',
                  'duplicate_flag', 'gap_flag', 'arrival_time'])
 
@@ -30,24 +29,29 @@ bytes_total = 0
 dup_count = 0
 loss_count = 0
 
-# Per-device last sequence for duplicate/loss detection
+# Per-device tracking
 last_seq = {}
-
-# Per-device reordering buffers
 buffers = {}
-BUFFER_THRESHOLD = 5   # only flush when buffer > 5
+BUFFER_THRESHOLD = 5
+
 cpu_counts = 0
 cpu_total_time = 0
 
+start_time = time.time()
 
-try:
-    while running:
+while (time.time() - start_time < RUN_DURATION):
 
-        packet, address = server_socket.recvfrom(1024)
+        # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        try:
+            packet, address = server_socket.recvfrom(1024)
+        except skt.timeout:
+            continue                 # <── ONLY ADDITION #2
+        # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
         if len(packet) < Header.Size:
             print("[SERVER] Invalid packet size\n")
             continue
+
         header = Header()
         header.unPack(packet[:Header.Size])
         arrival_time = time.time()
@@ -58,110 +62,134 @@ try:
         duplicate_flag = 0
         gap_flag = 0
 
-        # ============= HANDLE HEARTBEAT & INIT =============
+
+        # =====================================================
+        # HEARTBEAT
+        # =====================================================
         if header.msg_type == 0:
             print(f"[SERVER] HEARTBEAT from {dev}, time={header.timestamp}\n")
             continue
 
+
+        # =====================================================
+        # INIT PACKET
+        # =====================================================
         if header.msg_type == 2:
             print(f"[SERVER] INIT from {dev}, time={header.timestamp}\n")
             continue
 
-        # ============= HANDLE DATA PACKET =============
+
+        # =====================================================
+        # DATA PACKET
+        # =====================================================
         if header.msg_type == 1:
+
             cpu_start = time.process_time()
 
-            # Sequence tracking
+            # -------------------------------------------------
+            # SEND ACK IF DANGER PACKET
+            # -------------------------------------------------
+            if header.flags == 1:
+                try:
+                    ack = (1).to_bytes(1, "big")
+                    server_socket.sendto(ack, address)
+                    time.sleep(3)
+                    print(f"[SERVER] Sent ACK to device {dev}")
+                except Exception as e:
+                    print(f"[SERVER] Failed to send ACK: {e}")
+
+            # -------------------------------------------------
+            # SEQUENCE TRACKING (duplicates & gaps)
+            # -------------------------------------------------
             if dev in last_seq:
                 if seq == last_seq[dev]:
                     duplicate_flag = 1
                     dup_count += 1
+                    continue
                 elif seq > last_seq[dev] + 1:
                     gap_flag = 1
                     loss_count += 1
 
             last_seq[dev] = seq
 
-            # Decode payload
+            # Decode payload value
             payload = packet[Header.Size:]
-            value = payload.decode(errors='ignore')
+            value = struct.unpack('!H',payload)[0]
 
             # Update metrics
             packet_count += 1
             bytes_total += len(packet)
 
             print(f"[SERVER] DATA from {dev} seq={seq}, value={value}, "
-                  f"time={header.timestamp}\n")
+                  f"time={header.timestamp}, danger_flag={header.flags}\n")
 
-            # Create buffer for device if needed
+            # Create buffer if missing
             if dev not in buffers:
                 buffers[dev] = []
 
-            # Create packet entry
             packet_entry = (
-                header.timestamp,   # 0 timestamp (sorting key)
-                seq,                # 1 sequence number
-                value,              # 2 value
-                duplicate_flag,     # 3 duplicate flag
-                gap_flag,           # 4 gap flag
-                arrival_time,
+                header.timestamp,  # 0 timestamp (sorting)
+                seq,               # 1 seq
+                value,             # 2 value
+                duplicate_flag,    # 3 duplicate
+                gap_flag,          # 4 gap
+                arrival_time       # 5 arrival time
             )
 
-            # Add to buffer
+            # Add to buffer and sort
             buffers[dev].append(packet_entry)
-
-            # Sort by timestamp
             buffers[dev].sort(key=lambda x: x[0])
-            cpu_end = time.process_time()
-            cpu_counts+=1
-            cpu_ms_per_packet = cpu_end - cpu_start
 
-            cpu_total_time+=cpu_ms_per_packet
-            # Flush oldest packet when buffer grows
+            # CPU tracking
+            cpu_end = time.process_time()
+            cpu_counts += 1
+            cpu_total_time += (cpu_end - cpu_start)
+
+            # -------------------------------------------------
+            # FLUSH FROM BUFFER WHEN TOO LARGE
+            # -------------------------------------------------
             if len(buffers[dev]) > BUFFER_THRESHOLD:
                 oldest = buffers[dev].pop(0)
-
                 writer.writerow([
                     dev,
-                    oldest[1],   # seq
-                    oldest[0],   # timestamp
-                    oldest[2],   # value
-                    oldest[3],   # duplicate flag
-                    oldest[4],   # gap flag
-                    oldest[5],
+                    oldest[1],  # seq
+                    oldest[0],  # timestamp
+                    oldest[2],  # value
+                    oldest[3],  # duplicate flag
+                    oldest[4],  # gap flag
+                    oldest[5],  # arrival time
                 ])
                 temp_csv.flush()
 
+# =====================================================
+# FLUSH REMAINING BUFFERS
+# =====================================================
+for dev in buffers:
+    buffers[dev].sort(key=lambda x: x[0])
+    for pkt in buffers[dev]:
+        writer.writerow([
+            dev,
+            pkt[1],  # seq
+            pkt[0],  # timestamp
+            pkt[2],  # value
+            pkt[3],  # duplicate_flag
+            pkt[4],  # gap_flag
+            pkt[5],  # arrival_time
+        ])
 
-except KeyboardInterrupt:
-    print("\n\n[SERVER] Keyboard interrupt received. Shutting down...")
+# =====================================================
+# METRICS
+# =====================================================
+if packet_count > 0:
+    avg_bytes = bytes_total / packet_count
+    print(f"[METRIC] bytes_per_report = {avg_bytes:.2f} bytes\n")
+    print(f"[METRIC] packets_received = {packet_count}\n")
+    print(f"[METRIC] Packets lost = {loss_count}\n")
+    print(f"[METRIC] packets duplicated = {dup_count}\n")
+    print(f"[METRIC] CPU_MS_PER_REPORT = {(cpu_total_time / cpu_counts) * 1000}\n")
+else:
+    print("[METRIC] No packets received.\n")
 
-finally:
-    # Flush remaining packets from buffers
-    for dev in buffers:
-        buffers[dev].sort(key=lambda x: x[0])
-        for pkt in buffers[dev]:
-            writer.writerow([
-                dev,
-                pkt[1],  # seq
-                pkt[0],  # timestamp
-                pkt[2],  # value
-                pkt[3],  # duplicate_flag
-                pkt[4],  # gap_flag
-                pkt[5]   # arrival_time
-            ])
-
-    # Print metrics
-    if packet_count > 0:
-        avg_bytes = bytes_total / packet_count
-        print(f"[METRIC] bytes_per_report = {avg_bytes:.2f} bytes\n")
-        print(f"[METRIC] packets_received = {packet_count}\n")
-        print(f"[METRIC] Packets lost = {loss_count}\n")
-        print(f"[METRIC] packets duplicated = {dup_count}\n")
-        print(f"CPU_MS_PER_REPORT = {(cpu_total_time/cpu_counts) *1000}")
-    else:
-        print("[METRIC] No packets received.\n")
-
-    temp_csv.close()
-    server_socket.close()
-    print("[SERVER] Shutdown complete.\n")
+temp_csv.close()
+server_socket.close()
+print("[SERVER] Shutdown complete.\n")

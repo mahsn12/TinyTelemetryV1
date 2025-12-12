@@ -1,0 +1,45 @@
+[INFO] Client 102 sent INIT[INFO] Client 101 sent INIT
+[INFO] Client 103 sent INIT
+
+[CLIENT 101] Sent DATA seq=0, value=49, flag=0
+[CLIENT 102] Sent DATA seq=0, value=15, flag=0
+[CLIENT 103] Sent DATA seq=0, value=46, flag=0
+[CLIENT 101] Sent DATA seq=1, value=44, flag=0[CLIENT 103] Sent DATA seq=1, value=31, flag=0
+[CLIENT 102] Sent DATA seq=1, value=31, flag=0
+
+[CLIENT 103] Sent HEARTBEAT
+[CLIENT 101] Sent HEARTBEAT
+[CLIENT 102] Sent HEARTBEAT
+[CLIENT 103] Sent DATA seq=2, value=2, flag=0
+[CLIENT 101] Sent DATA seq=2, value=1, flag=0
+[CLIENT 102] Valid ACK received
+[CLIENT 102] Sent DATA seq=2, value=101, flag=1
+[CLIENT 101] Sent DATA seq=3, value=1, flag=0
+[CLIENT 102] Sent DATA seq=3, value=4, flag=0
+[CLIENT 103] Sent DATA seq=3, value=42, flag=0
+[CLIENT 102] Sent DATA seq=4, value=13, flag=0[CLIENT 103] Sent DATA seq=4, value=26, flag=0
+
+[CLIENT 101] Sent DATA seq=4, value=48, flag=0
+[CLIENT 103] Sent DATA seq=5, value=37, flag=0[CLIENT 101] Sent DATA seq=5, value=26, flag=0
+
+[CLIENT 102] Sent DATA seq=5, value=21, flag=0
+[CLIENT 101] Sent DATA seq=6, value=41, flag=0
+[CLIENT 102] Sent DATA seq=6, value=30, flag=0
+[CLIENT 103] Sent DATA seq=6, value=15, flag=0
+[CLIENT 103] Sent DATA seq=7, value=30, flag=0
+[CLIENT 101] Sent DATA seq=7, value=44, flag=0
+[CLIENT 102] Valid ACK received
+[CLIENT 102] Sent DATA seq=7, value=88, flag=1
+[CLIENT 103] Sent DATA seq=8, value=13, flag=0
+[CLIENT 101] Sent DATA seq=8, value=49, flag=0
+[CLIENT 102] Sent DATA seq=8, value=11, flag=0
+[CLIENT 103] Sent HEARTBEAT
+[CLIENT 102] Sent HEARTBEAT
+[CLIENT 101] Sent HEARTBEAT
+[CLIENT 103] Sent DATA seq=9, value=20, flag=0
+[CLIENT 101] Sent DATA seq=9, value=42, flag=0
+[CLIENT 102] Sent DATA seq=9, value=9, flag=0
+[CLIENT 101] Shutdown cleanly.[CLIENT 103] Shutdown cleanly.
+
+[CLIENT 102] Shutdown cleanly.
+[aCLIENTS] Run duration complete. Exiting.
