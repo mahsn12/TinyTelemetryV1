@@ -17,25 +17,48 @@ print(f"[SERVER] Listening on UDP {server_IP}:{server_port}")
 # -------------------------
 # CSV setup
 # -------------------------
-temp_csv = open('temp.csv', 'w', newline='')
+# CSV path: allow override via PACKETS_CSV env var. If opening fails, fall back to /tmp
+csv_path = os.getenv('PACKETS_CSV', 'temp.csv')
+try:
+    csv_dir = os.path.dirname(csv_path)
+    if csv_dir:
+        os.makedirs(csv_dir, exist_ok=True)
+    temp_csv = open(csv_path, 'w', newline='')
+except Exception:
+    # fallback to /tmp/<project>/tests/packets.csv
+    fallback_base = os.path.join('/tmp', os.path.basename(os.getcwd()))
+    try:
+        os.makedirs(os.path.join(fallback_base, 'tests'), exist_ok=True)
+    except Exception:
+        pass
+    csv_path = os.path.join(fallback_base, 'tests', os.path.basename(csv_path) or 'packets.csv')
+    try:
+        temp_csv = open(csv_path, 'w', newline='')
+    except Exception:
+        # last resort: open in current dir (may raise)
+        temp_csv = open('temp.csv', 'w', newline='')
 writer = csv.writer(temp_csv)
 writer.writerow([
     'device_id', 'seq_num', 'timestamp', 'value',
     'duplicate_flag', 'gap_flag', 'arrival_time'
 ])
+print(f"[SERVER] Writing packets CSV to: {csv_path}")
 
 # -------------------------
 # Metrics
 # -------------------------
-packet_count = 0
-bytes_total = 0
+# packets_received: number of unique DATA packets accepted (not duplicate packets)
+packets_received = 0
+# total bytes across accepted packets (for bytes_per_report)
+packets_bytes_total = 0
 # duplicate metrics: total duplicate packet arrivals, and number of distinct seqs that experienced duplication
 dup_total = 0
 dup_seq_count = 0
 dup_seq_seen = {}  # dev -> set(seq)
 loss_count = 0
 
-written_count = 0
+# readings_written: total number of individual readings written to CSV (after batching)
+readings_written = 0
 
 cpu_counts = 0
 cpu_total_time = 0
@@ -78,6 +101,12 @@ while time.time() - start_time < RUN_DURATION:
     # -------------------------
     if header.msg_type == 0:
         print(f"[SERVER] HEARTBEAT from {dev}")
+        # reply to heartbeat so clients can detect server liveness
+        try:
+            alive = struct.pack('!B', 4)
+            server_socket.sendto(alive, address)
+        except Exception:
+            pass
         continue
 
     # -------------------------
@@ -101,33 +130,44 @@ while time.time() - start_time < RUN_DURATION:
     duplicate_flag = 0
     gap_flag = 0
 
-    # If already written this seq -> duplicate
-    if seq <= last_written[dev]:
-        duplicate_flag = 1
-        # mark duplicate totals and per-seq
-        dup_total += 1
-        if dev not in dup_seq_seen:
-            dup_seq_seen[dev] = set()
-        if seq not in dup_seq_seen[dev]:
-            dup_seq_seen[dev].add(seq)
-            dup_seq_count += 1
-        # duplicate received; ignore for writing
-        continue
+    # parse payload into one or more readings (batch support)
+    payload = packet[Header.Size:]
+    num_readings = max(1, len(payload) // 2)
+    readings = []
+    for i in range(num_readings):
+        start = i * 2
+        value = struct.unpack('!H', payload[start:start+2])[0]
+        seq_i = seq + i
+        readings.append((seq_i, header.timestamp, value, arrival_time))
 
-    # If already in buffer -> duplicate
-    if any(p[0] == seq for p in buffers[dev]):
-        duplicate_flag = 1
-        dup_total += 1
-        if dev not in dup_seq_seen:
-            dup_seq_seen[dev] = set()
-        if seq not in dup_seq_seen[dev]:
-            dup_seq_seen[dev].add(seq)
-            dup_seq_count += 1
-        continue
+    # classify readings: detect duplicates and collect new readings
+    new_readings = []
+    for seq_i, ts_i, val_i, at_i in readings:
+        if seq_i <= last_written[dev]:
+            # already written -> duplicate arrival
+            dup_total += 1
+            if dev not in dup_seq_seen:
+                dup_seq_seen[dev] = set()
+            if seq_i not in dup_seq_seen[dev]:
+                dup_seq_seen[dev].add(seq_i)
+                dup_seq_count += 1
+            continue
+        if any(p[0] == seq_i for p in buffers[dev]):
+            # already buffered -> duplicate arrival
+            dup_total += 1
+            if dev not in dup_seq_seen:
+                dup_seq_seen[dev] = set()
+            if seq_i not in dup_seq_seen[dev]:
+                dup_seq_seen[dev].add(seq_i)
+                dup_seq_count += 1
+            continue
+        new_readings.append((seq_i, ts_i, val_i, at_i))
 
-    # store packet in list buffer
-    value = struct.unpack('!H', packet[Header.Size:])[0]
-    buffers[dev].append((seq, header.timestamp, value, arrival_time))
+    # accept packet only if it contains at least one new reading
+    if new_readings:
+        buffers[dev].extend(new_readings)
+        packets_received += 1
+        packets_bytes_total += len(packet)
 
     # send ACK if requested (type 1 + seq32)
     if header.flags == 1:
@@ -165,16 +205,14 @@ while time.time() - start_time < RUN_DURATION:
                 # write the packet and advance
                 writer.writerow([dev, seq_b, ts_b, val_b, duplicate_flag, gap_flag, at_b])
                 temp_csv.flush()
-                written_count += 1
-                bytes_total += (Header.Size + 2)
+                readings_written += 1
                 last_written[dev] = seq_b
                 expected = seq_b + 1
             else:
                 # in-order packet
                 writer.writerow([dev, seq_b, ts_b, val_b, duplicate_flag, gap_flag, at_b])
                 temp_csv.flush()
-                written_count += 1
-                bytes_total += (Header.Size + 2)
+                readings_written += 1
                 last_written[dev] = seq_b
                 expected += 1
 
@@ -205,15 +243,13 @@ while time.time() - start_time < RUN_DURATION:
                 gap_flag = 1
                 writer.writerow([dev, seq_b, ts_b, val_b, duplicate_flag, gap_flag, at_b])
                 temp_csv.flush()
-                written_count += 1
-                bytes_total += (Header.Size + 2)
+                readings_written += 1
                 last_written[dev] = seq_b
                 expected = seq_b + 1
             else:
                 writer.writerow([dev, seq_b, ts_b, val_b, duplicate_flag, gap_flag, at_b])
                 temp_csv.flush()
-                written_count += 1
-                bytes_total += (Header.Size + 2)
+                readings_written += 1
                 last_written[dev] = seq_b
                 expected += 1
 
@@ -242,15 +278,13 @@ for dev in list(buffers.keys()):
                 gap_flag = 1
                 writer.writerow([dev, seq_b, ts_b, val_b, duplicate_flag, gap_flag, at_b])
                 temp_csv.flush()
-                written_count += 1
-                bytes_total += (Header.Size + 2)
+                readings_written += 1
                 last_written[dev] = seq_b
                 expected = seq_b + 1
             else:
                 writer.writerow([dev, seq_b, ts_b, val_b, duplicate_flag, gap_flag, at_b])
                 temp_csv.flush()
-                written_count += 1
-                bytes_total += (Header.Size + 2)
+                readings_written += 1
                 last_written[dev] = seq_b
                 expected += 1
     else:
@@ -271,26 +305,18 @@ for dev in list(buffers.keys()):
 # Metrics
 # =====================================================
 print("\n[METRICS]")
-# compute losses per-device using highest-seen sequence minus last_written
-for dev in set(list(max_seq_seen.keys()) + list(last_written.keys())):
-    max_seen = max_seq_seen.get(dev, -1)
-    last_w = last_written.get(dev, -1)
-
-    # sequences that should exist
-    expected_seqs = set(range(last_w + 1, max_seen + 1))
-
-    # sequences that actually arrived but are still buffered
-    buffered_seqs = set(seq for seq, *_ in buffers.get(dev, []))
-
-    # lost = expected but neither written nor buffered
-    lost_seqs = expected_seqs - buffered_seqs
-
-    loss_count += len(lost_seqs)
-
-print(f"Packets written: {written_count}")
+# packets_received: unique packets accepted
+print(f"Packets received: {packets_received}")
+print(f"Readings written: {readings_written}")
 print(f"Packets lost: {loss_count}")
 print(f"Duplicate packets (total arrivals): {dup_total}")
 print(f"Duplicate sequences: {dup_seq_count}")
-print(f"Avg bytes: {bytes_total / max(written_count,1):.2f}")
+# duplicate_rate per spec: dup_total / (readings_written + dup_total)
+dup_rate = dup_total / max((readings_written + dup_total), 1)
+print(f"Duplicate rate: {dup_rate:.6f}")
+# bytes per report (per reading)
+bytes_per_report = packets_bytes_total / max(readings_written, 1)
+print(f"Bytes per report: {bytes_per_report:.2f}")
 print(f"CPU_MS_PER_REPORT = {(cpu_total_time / max(cpu_counts,1)) * 1000:.3f}")
 
+print("----------------------------------------------------------")

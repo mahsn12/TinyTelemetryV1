@@ -21,6 +21,9 @@ reorder_lock = threading.Lock()
 send_queue = []
 send_queue_lock = threading.Lock()
 
+# Server liveness flag
+SERVER_ALIVE = True
+
 # start a background thread to flush scheduled sends
 def _sender_thread(sock):
     while True:
@@ -60,6 +63,23 @@ def maybe_recv_ack(sock, expected_addr, expected_seq=None, timeout=1.0):
             t = pkt[0]
             seq = struct.unpack('!I', pkt[1:5])[0]
             return t == 1 and (expected_seq is None or seq == expected_seq)
+        return False
+    except Exception:
+        return False
+    finally:
+        sock.settimeout(prev)
+
+
+def maybe_recv_alive(sock, expected_addr, timeout=5.0):
+    prev = sock.gettimeout()
+    sock.settimeout(timeout)
+    try:
+        pkt, a = sock.recvfrom(1024)
+        if a != expected_addr:
+            return False
+        if len(pkt) >= 1:
+            t = pkt[0]
+            return t == 4
         return False
     except Exception:
         return False
@@ -107,10 +127,23 @@ def netem_send(sock, packet, addr, seq=None):
 
 
 def send_heartbeat(client):
+    global SERVER_ALIVE
     time.sleep(5)
-    while time.time() - start_time < RUN_DURATION:
+    missed = 0
+    while time.time() - start_time < RUN_DURATION and SERVER_ALIVE:
         hb = Header(device_id=client.device_id, msg_type=0).heartbeat()
         netem_send(client.sock, hb, (server_IP, server_port))
+        # wait for server alive reply
+        alive = maybe_recv_alive(client.sock, (server_IP, server_port), timeout=5.0)
+        if not alive:
+            missed += 1
+            print(f"[CLIENT {client.device_id}] Missed heartbeat reply {missed}")
+            if missed >= 3:
+                print(f"[CLIENT {client.device_id}] Server appears down — stopping client threads")
+                SERVER_ALIVE = False
+                break
+        else:
+            missed = 0
         time.sleep(30)
 
 
@@ -123,7 +156,7 @@ def client_thread(client):
 
     threading.Thread(target=send_heartbeat, args=(client,), daemon=True).start()
 
-    while time.time() - start_time < RUN_DURATION:
+    while time.time() - start_time < RUN_DURATION and SERVER_ALIVE:
         value = custom_random()
         danger = 1 if value >= 60 else 0
 
@@ -170,7 +203,13 @@ for c in clients:
     threading.Thread(target=client_thread, args=(c,), daemon=True).start()
     time.sleep(0.5)
 
-while time.time() - start_time < RUN_DURATION:
-    time.sleep(1)
+try:
+    while time.time() - start_time < RUN_DURATION and SERVER_ALIVE:
+        time.sleep(1)
+except KeyboardInterrupt:
+    pass
+
+if not SERVER_ALIVE:
+    print("Server detected down — exiting client process")
 
 sys.exit(0)

@@ -1,45 +1,194 @@
-[INFO] Client 102 sent INIT[INFO] Client 101 sent INIT
-[INFO] Client 103 sent INIT
+[CLIENT 101] INIT sent
+[NETEM SCHEDULE] seq=0 delay_ms=109.0 target=1765651243.804
+[CLIENT 101] DATA seq=0 val=29 danger=0
+[NETEM RELEASE] seq=0 sent to ('127.0.0.2', 8888)
+[CLIENT 102] INIT sent
+[NETEM SCHEDULE] seq=0 delay_ms=240.3 target=1765651244.453
+[CLIENT 102] DATA seq=0 val=38 danger=0
+[NETEM RELEASE] seq=0 sent to ('127.0.0.2', 8888)
+[CLIENT 103] INIT sent
+[NETEM SCHEDULE] seq=0 delay_ms=99.3 target=1765651244.831
+[CLIENT 103] DATA seq=0 val=6 danger=0
+[NETEM RELEASE] seq=0 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=1 delay_ms=92.9 target=1765651247.822
+[CLIENT 101] DATA seq=1 val=17 danger=0
+[NETEM RELEASE] seq=1 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=1 delay_ms=94.3 target=1765651248.411
+[CLIENT 102] DATA seq=1 val=33 danger=0
+[NETEM RELEASE] seq=1 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=1 delay_ms=96.0 target=1765651248.851
+[CLIENT 103] DATA seq=1 val=30 danger=0
+[NETEM RELEASE] seq=1 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=2 delay_ms=90.4 target=1765651251.853
+[CLIENT 101] DATA seq=2 val=25 danger=0
+[NETEM RELEASE] seq=2 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=2 delay_ms=117.1 target=1765651252.544
+[CLIENT 102] DATA seq=2 val=11 danger=0
+[NETEM RELEASE] seq=2 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=2 delay_ms=270.1 target=1765651253.044
+[CLIENT 103] DATA seq=2 val=2 danger=0
+[NETEM RELEASE] seq=2 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=3 delay_ms=91.1 target=1765651255.884
+[CLIENT 101] DATA seq=3 val=16 danger=0
+[NETEM RELEASE] seq=3 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=3 delay_ms=100.6 target=1765651256.629
+[CLIENT 102] DATA seq=3 val=13 danger=0
+[NETEM RELEASE] seq=3 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=3 delay_ms=106.8 target=1765651256.893
+[CLIENT 103] DATA seq=3 val=46 danger=0
+[NETEM RELEASE] seq=3 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=4 delay_ms=106.9 target=1765651259.923
+[CLIENT 101] DATA seq=4 val=41 danger=0
+[NETEM RELEASE] seq=4 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=4 delay_ms=173.4 target=1765651260.808
+[CLIENT 102] DATA seq=4 val=21 danger=0
+[NETEM SCHEDULE] seq=4 delay_ms=253.0 target=1765651261.047
+[CLIENT 103] DATA seq=4 val=46 danger=0
+[NETEM RELEASE] seq=4 sent to ('127.0.0.2', 8888)
+[NETEM RELEASE] seq=4 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=5 delay_ms=109.6 target=1765651263.944
+[NETEM RELEASE] seq=5 sent to ('127.0.0.2', 8888)
+[CLIENT 101] ACK seq=5
+[CLIENT 101] DATA seq=5 val=76 danger=1
+[NETEM SCHEDULE] seq=5 delay_ms=100.3 target=1765651263.254
+[CLIENT 102] DATA seq=5 val=38 danger=0
+[NETEM RELEASE] seq=5 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=5 delay_ms=95.1 target=1765651263.414
+[CLIENT 103] DATA seq=5 val=21 danger=0
+[NETEM RELEASE] seq=5 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=6 delay_ms=156.2 target=1765651266.641
+[CLIENT 101] DATA seq=6 val=31 danger=0
+[NETEM RELEASE] seq=6 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=6 delay_ms=204.9 target=1765651267.360
+[CLIENT 102] DATA seq=6 val=26 danger=0
+[NETEM SCHEDULE] seq=6 delay_ms=96.0 target=1765651267.423
+[CLIENT 103] DATA seq=6 val=20 danger=0
+[NETEM RELEASE] seq=6 sent to ('127.0.0.2', 8888)
+[NETEM RELEASE] seq=6 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=7 delay_ms=90.8 target=1765651270.592
+[CLIENT 101] DATA seq=7 val=23 danger=0
+[NETEM RELEASE] seq=7 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=7 delay_ms=109.4 target=1765651271.355
+[CLIENT 102] DATA seq=7 val=48 danger=0
+[NETEM SCHEDULE] seq=7 delay_ms=101.8 target=1765651271.433
+[CLIENT 103] DATA seq=7 val=31 danger=0
+[NETEM RELEASE] seq=7 sent to ('127.0.0.2', 8888)
+[NETEM RELEASE] seq=7 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=8 delay_ms=177.5 target=1765651274.680
+[CLIENT 101] DATA seq=8 val=14 danger=0
+[NETEM RELEASE] seq=8 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=8 delay_ms=101.2 target=1765651275.461[NETEM SCHEDULE] seq=8 delay_ms=108.0 target=1765651275.468
+[CLIENT 103] DATA seq=8 val=9 danger=0
 
-[CLIENT 101] Sent DATA seq=0, value=49, flag=0
-[CLIENT 102] Sent DATA seq=0, value=15, flag=0
-[CLIENT 103] Sent DATA seq=0, value=46, flag=0
-[CLIENT 101] Sent DATA seq=1, value=44, flag=0[CLIENT 103] Sent DATA seq=1, value=31, flag=0
-[CLIENT 102] Sent DATA seq=1, value=31, flag=0
-
-[CLIENT 103] Sent HEARTBEAT
-[CLIENT 101] Sent HEARTBEAT
-[CLIENT 102] Sent HEARTBEAT
-[CLIENT 103] Sent DATA seq=2, value=2, flag=0
-[CLIENT 101] Sent DATA seq=2, value=1, flag=0
-[CLIENT 102] Valid ACK received
-[CLIENT 102] Sent DATA seq=2, value=101, flag=1
-[CLIENT 101] Sent DATA seq=3, value=1, flag=0
-[CLIENT 102] Sent DATA seq=3, value=4, flag=0
-[CLIENT 103] Sent DATA seq=3, value=42, flag=0
-[CLIENT 102] Sent DATA seq=4, value=13, flag=0[CLIENT 103] Sent DATA seq=4, value=26, flag=0
-
-[CLIENT 101] Sent DATA seq=4, value=48, flag=0
-[CLIENT 103] Sent DATA seq=5, value=37, flag=0[CLIENT 101] Sent DATA seq=5, value=26, flag=0
-
-[CLIENT 102] Sent DATA seq=5, value=21, flag=0
-[CLIENT 101] Sent DATA seq=6, value=41, flag=0
-[CLIENT 102] Sent DATA seq=6, value=30, flag=0
-[CLIENT 103] Sent DATA seq=6, value=15, flag=0
-[CLIENT 103] Sent DATA seq=7, value=30, flag=0
-[CLIENT 101] Sent DATA seq=7, value=44, flag=0
-[CLIENT 102] Valid ACK received
-[CLIENT 102] Sent DATA seq=7, value=88, flag=1
-[CLIENT 103] Sent DATA seq=8, value=13, flag=0
-[CLIENT 101] Sent DATA seq=8, value=49, flag=0
-[CLIENT 102] Sent DATA seq=8, value=11, flag=0
-[CLIENT 103] Sent HEARTBEAT
-[CLIENT 102] Sent HEARTBEAT
-[CLIENT 101] Sent HEARTBEAT
-[CLIENT 103] Sent DATA seq=9, value=20, flag=0
-[CLIENT 101] Sent DATA seq=9, value=42, flag=0
-[CLIENT 102] Sent DATA seq=9, value=9, flag=0
-[CLIENT 101] Shutdown cleanly.[CLIENT 103] Shutdown cleanly.
-
-[CLIENT 102] Shutdown cleanly.
-[aCLIENTS] Run duration complete. Exiting.
+[CLIENT 102] DATA seq=8 val=5 danger=0
+[NETEM RELEASE] seq=8 sent to ('127.0.0.2', 8888)
+[NETEM RELEASE] seq=8 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=9 delay_ms=255.4 target=1765651278.765
+[CLIENT 101] DATA seq=9 val=19 danger=0
+[NETEM RELEASE] seq=9 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=9 delay_ms=95.9 target=1765651279.485
+[CLIENT 103] DATA seq=9 val=35 danger=0
+[NETEM SCHEDULE] seq=9 delay_ms=107.5 target=1765651279.597
+[CLIENT 102] DATA seq=9 val=24 danger=0
+[NETEM RELEASE] seq=9 sent to ('127.0.0.2', 8888)
+[NETEM RELEASE] seq=9 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=10 delay_ms=189.7 target=1765651282.737
+[CLIENT 101] DATA seq=10 val=38 danger=0
+[NETEM RELEASE] seq=10 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=10 delay_ms=147.8 target=1765651283.560
+[CLIENT 103] DATA seq=10 val=45 danger=0
+[NETEM RELEASE] seq=10 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=10 delay_ms=104.5 target=1765651283.742
+[NETEM RELEASE] seq=10 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=10 delay_ms=98.4 target=1765651284.793
+[NETEM RELEASE] seq=10 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=11 delay_ms=291.9 target=1765651286.867
+[CLIENT 101] DATA seq=11 val=18 danger=0
+[NETEM SCHEDULE] seq=10 delay_ms=140.6 target=1765651286.926
+[NETEM RELEASE] seq=11 sent to ('127.0.0.2', 8888)
+[NETEM RELEASE] seq=10 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=11 delay_ms=100.4 target=1765651287.526
+[CLIENT 103] DATA seq=11 val=8 danger=0
+[NETEM RELEASE] seq=11 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=12 delay_ms=250.9 target=1765651290.834
+[CLIENT 101] DATA seq=12 val=22 danger=0
+[NETEM RELEASE] seq=12 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=10 delay_ms=105.6 target=1765651290.985
+[NETEM RELEASE] seq=10 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=12 delay_ms=98.7 target=1765651291.531
+[CLIENT 103] DATA seq=12 val=34 danger=0
+[NETEM RELEASE] seq=12 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=13 delay_ms=90.3 target=1765651294.686
+[CLIENT 101] DATA seq=13 val=14 danger=0
+[NETEM RELEASE] seq=13 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=10 delay_ms=105.7 target=1765651295.084
+[NETEM RELEASE] seq=10 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=13 delay_ms=260.4 target=1765651294.183
+[CLIENT 103] DATA seq=13 val=6 danger=0
+[NETEM RELEASE] seq=13 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=14 delay_ms=91.9 target=1765651297.183
+[CLIENT 101] DATA seq=14 val=36 danger=0
+[NETEM RELEASE] seq=14 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=10 delay_ms=91.0 target=1765651297.630
+[CLIENT 102] WARNING: no ACK for seq=10 after 5 attempts
+[CLIENT 102] DATA seq=10 val=66 danger=1
+[NETEM RELEASE] seq=10 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=14 delay_ms=100.2 target=1765651298.064
+[NETEM RELEASE] seq=14 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=14 delay_ms=100.3 target=1765651299.108
+[NETEM RELEASE] seq=14 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=14 delay_ms=93.2 target=1765651301.179
+[NETEM SCHEDULE] seq=15 delay_ms=99.8 target=1765651301.195
+[CLIENT 101] DATA seq=15 val=18 danger=0
+[NETEM RELEASE] seq=14 sent to ('127.0.0.2', 8888)
+[NETEM RELEASE] seq=15 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=11 delay_ms=101.2 target=1765651301.656
+[CLIENT 102] DATA seq=11 val=47 danger=0
+[NETEM RELEASE] seq=11 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=16 delay_ms=105.2 target=1765651305.226
+[CLIENT 101] DATA seq=16 val=1 danger=0
+[NETEM SCHEDULE] seq=14 delay_ms=97.5 target=1765651305.292
+[NETEM RELEASE] seq=16 sent to ('127.0.0.2', 8888)
+[NETEM RELEASE] seq=14 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=12 delay_ms=255.2 target=1765651305.944
+[CLIENT 102] DATA seq=12 val=39 danger=0
+[CLIENT 101] Missed heartbeat reply 1
+[NETEM RELEASE] seq=12 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=17 delay_ms=96.9 target=1765651309.236
+[CLIENT 101] DATA seq=17 val=2 danger=0
+[NETEM RELEASE] seq=17 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=14 delay_ms=213.5 target=1765651309.522
+[NETEM RELEASE] seq=14 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=13 delay_ms=93.4 target=1765651309.929
+[CLIENT 102] DATA seq=13 val=38 danger=0
+[NETEM RELEASE] seq=13 sent to ('127.0.0.2', 8888)
+[CLIENT 102] Missed heartbeat reply 1
+[CLIENT 103] Missed heartbeat reply 1
+[NETEM SCHEDULE] seq=18 delay_ms=104.8 target=1765651313.251
+[CLIENT 101] DATA seq=18 val=37 danger=0
+[NETEM RELEASE] seq=18 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=14 delay_ms=100.3 target=1765651313.521
+[CLIENT 103] WARNING: no ACK for seq=14 after 5 attempts
+[CLIENT 103] DATA seq=14 val=67 danger=1
+[NETEM RELEASE] seq=14 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=14 delay_ms=235.1 target=1765651314.209
+[CLIENT 102] DATA seq=14 val=45 danger=0
+[NETEM RELEASE] seq=14 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=19 delay_ms=100.6 target=1765651317.301
+[CLIENT 101] DATA seq=19 val=37 danger=0
+[NETEM RELEASE] seq=19 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=15 delay_ms=103.9 target=1765651317.638
+[CLIENT 103] DATA seq=15 val=36 danger=0
+[NETEM RELEASE] seq=15 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=15 delay_ms=107.0 target=1765651318.226
+[NETEM RELEASE] seq=15 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=15 delay_ms=108.4 target=1765651319.283
+[NETEM RELEASE] seq=15 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=15 delay_ms=223.7 target=1765651321.493
+[NETEM SCHEDULE] seq=20 delay_ms=178.5 target=1765651321.467
+[CLIENT 101] DATA seq=20 val=10 danger=0
+[NETEM RELEASE] seq=20 sent to ('127.0.0.2', 8888)
+[NETEM RELEASE] seq=15 sent to ('127.0.0.2', 8888)
+[NETEM SCHEDULE] seq=16 delay_ms=103.0 target=1765651321.688
+[CLIENT 103] DATA seq=16 val=2 danger=0
+[NETEM RELEASE] seq=16 sent to ('127.0.0.2', 8888)

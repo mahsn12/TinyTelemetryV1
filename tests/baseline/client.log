@@ -1,49 +1,71 @@
-[INFO] Client 102 sent INIT[INFO] Client 103 sent INIT
-
-[INFO] Client 101 sent INIT
-[CLIENT 103] Sent DATA seq=0, value=11, flag=0
-[CLIENT 102] Valid ACK received[CLIENT 101] Sent DATA seq=0, value=8, flag=0
-
-[CLIENT 102] Sent DATA seq=0, value=70, flag=1
-[CLIENT 103] Sent DATA seq=1, value=11, flag=0
-[CLIENT 101] Sent DATA seq=1, value=28, flag=0
-[CLIENT 102] Sent DATA seq=1, value=38, flag=0
-[CLIENT 103] Sent HEARTBEAT
-[CLIENT 102] Sent HEARTBEAT
-[CLIENT 101] Sent HEARTBEAT
-[CLIENT 103] Sent DATA seq=2, value=29, flag=0
-[CLIENT 101] Valid ACK received
-[CLIENT 101] Sent DATA seq=2, value=93, flag=1
-[CLIENT 102] Valid ACK received
-[CLIENT 102] Sent DATA seq=2, value=75, flag=1
-[CLIENT 101] Sent DATA seq=3, value=32, flag=0
-[CLIENT 103] Valid ACK received
-[CLIENT 103] Sent DATA seq=3, value=80, flag=1
-[CLIENT 102] Sent DATA seq=3, value=18, flag=0
-[CLIENT 101] Sent DATA seq=4, value=10, flag=0
-[CLIENT 103] Sent DATA seq=4, value=47, flag=0
-[CLIENT 102] Sent DATA seq=4, value=20, flag=0
-[CLIENT 101] Sent DATA seq=5, value=24, flag=0
-[CLIENT 103] Valid ACK received
-[CLIENT 103] Sent DATA seq=5, value=66, flag=1
-[CLIENT 102] Sent DATA seq=5, value=14, flag=0
-[CLIENT 101] Sent DATA seq=6, value=11, flag=0
-[CLIENT 103] Sent DATA seq=6, value=29, flag=0
-[CLIENT 102] Sent DATA seq=6, value=4, flag=0
-[CLIENT 101] Sent DATA seq=7, value=43, flag=0
-[CLIENT 103] Sent DATA seq=7, value=43, flag=0
-[CLIENT 102] Sent DATA seq=7, value=22, flag=0
-[CLIENT 101] Sent DATA seq=8, value=36, flag=0
-[CLIENT 103] Sent DATA seq=8, value=7, flag=0
-[CLIENT 101] Sent HEARTBEAT
-[CLIENT 102] Sent HEARTBEAT
-[CLIENT 103] Sent HEARTBEAT
-[CLIENT 102] Sent DATA seq=8, value=25, flag=0
-[CLIENT 101] Sent DATA seq=9, value=14, flag=0
-[CLIENT 103] Valid ACK received
-[CLIENT 103] Sent DATA seq=9, value=68, flag=1
-[CLIENT 102] Sent DATA seq=9, value=35, flag=0
-[CLIENT 102] Shutdown cleanly.
-[CLIENT 101] Shutdown cleanly.
-[CLIENT 103] Shutdown cleanly.
-[aCLIENTS] Run duration complete. Exiting.
+[CLIENT 101] INIT sent
+[CLIENT 101] DATA seq=0 val=38 danger=0
+[CLIENT 102] INIT sent
+[CLIENT 102] DATA seq=0 val=17 danger=0
+[CLIENT 103] INIT sent
+[CLIENT 103] DATA seq=0 val=26 danger=0
+[CLIENT 101] DATA seq=1 val=7 danger=0
+[CLIENT 102] DATA seq=1 val=35 danger=0
+[CLIENT 103] DATA seq=1 val=25 danger=0
+[CLIENT 101] DATA seq=2 val=23 danger=0
+[CLIENT 102] DATA seq=2 val=26 danger=0
+[CLIENT 103] DATA seq=2 val=42 danger=0
+[CLIENT 101] DATA seq=3 val=3 danger=0
+[CLIENT 102] DATA seq=3 val=39 danger=0
+[CLIENT 103] DATA seq=3 val=25 danger=0
+[CLIENT 101] DATA seq=4 val=1 danger=0
+[CLIENT 102] DATA seq=4 val=39 danger=0
+[CLIENT 103] DATA seq=4 val=14 danger=0
+[CLIENT 101] DATA seq=5 val=3 danger=0
+[CLIENT 102] ACK seq=5
+[CLIENT 102] DATA seq=5 val=71 danger=1
+[CLIENT 103] DATA seq=5 val=24 danger=0
+[CLIENT 101] DATA seq=6 val=38 danger=0
+[CLIENT 102] DATA seq=6 val=20 danger=0
+[CLIENT 103] DATA seq=6 val=42 danger=0
+[CLIENT 101] ACK seq=7
+[CLIENT 101] DATA seq=7 val=76 danger=1
+[CLIENT 102] DATA seq=7 val=41 danger=0
+[CLIENT 103] DATA seq=7 val=13 danger=0
+[CLIENT 101] DATA seq=8 val=39 danger=0
+[CLIENT 102] DATA seq=8 val=34 danger=0
+[CLIENT 103] DATA seq=8 val=50 danger=0
+[CLIENT 101] DATA seq=9 val=28 danger=0
+[CLIENT 102] DATA seq=9 val=31 danger=0
+[CLIENT 103] ACK seq=9
+[CLIENT 103] DATA seq=9 val=92 danger=1
+[CLIENT 101] DATA seq=10 val=23 danger=0
+[CLIENT 102] DATA seq=10 val=6 danger=0
+[CLIENT 103] DATA seq=10 val=2 danger=0
+[CLIENT 101] ACK seq=11
+[CLIENT 101] DATA seq=11 val=67 danger=1
+[CLIENT 102] DATA seq=11 val=45 danger=0
+[CLIENT 103] ACK seq=11
+[CLIENT 103] DATA seq=11 val=82 danger=1
+[CLIENT 101] DATA seq=12 val=43 danger=0
+[CLIENT 102] DATA seq=12 val=33 danger=0
+[CLIENT 103] DATA seq=12 val=8 danger=0
+[CLIENT 101] DATA seq=13 val=43 danger=0
+[CLIENT 102] DATA seq=13 val=29 danger=0
+[CLIENT 103] DATA seq=13 val=6 danger=0
+[CLIENT 101] ACK seq=14
+[CLIENT 101] DATA seq=14 val=105 danger=1
+[CLIENT 102] DATA seq=14 val=34 danger=0
+[CLIENT 103] DATA seq=14 val=9 danger=0
+[CLIENT 101] DATA seq=15 val=22 danger=0
+[CLIENT 102] DATA seq=15 val=39 danger=0
+[CLIENT 103] DATA seq=15 val=14 danger=0
+[CLIENT 101] DATA seq=16 val=8 danger=0
+[CLIENT 102] DATA seq=16 val=12 danger=0
+[CLIENT 101] DATA seq=17 val=11 danger=0
+[CLIENT 102] DATA seq=17 val=13 danger=0
+[CLIENT 101] Missed heartbeat reply 1
+[CLIENT 102] Missed heartbeat reply 1
+[CLIENT 103] Missed heartbeat reply 1
+[CLIENT 101] DATA seq=18 val=15 danger=0
+[CLIENT 102] DATA seq=18 val=31 danger=0
+[CLIENT 101] DATA seq=19 val=12 danger=0
+[CLIENT 102] DATA seq=19 val=15 danger=0
+[CLIENT 102] DATA seq=20 val=50 danger=0
+[CLIENT 103] WARNING: no ACK for seq=16 after 5 attempts
+[CLIENT 103] DATA seq=16 val=108 danger=1

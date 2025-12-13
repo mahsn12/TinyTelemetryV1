@@ -1,94 +1,23 @@
-[SERVER] Listening on UDP 127.0.0.2:8888...
+[SERVER] Listening on UDP 127.0.0.2:8888
+[SERVER] Writing packets CSV to: temp.csv
+[SERVER] INIT from 101
+[SERVER] INIT from 102
+[SERVER] INIT from 103
+[SERVER] HEARTBEAT from 101
+[SERVER] HEARTBEAT from 102
+[SERVER] HEARTBEAT from 103
+[SERVER] HEARTBEAT from 101
+[SERVER] HEARTBEAT from 102
+[SERVER] HEARTBEAT from 103
+[SERVER] HEARTBEAT from 101
 
-[SERVER] INIT from 101, time=1765568812
-
-[SERVER] INIT from 102, time=1765568812
-
-[SERVER] INIT from 103, time=1765568812
-
-[SERVER] DATA from 101 seq=0, value=49, time=1765568814, danger_flag=0
-
-[SERVER] DATA from 102 seq=0, value=15, time=1765568814, danger_flag=0
-
-[SERVER] DATA from 103 seq=0, value=46, time=1765568814, danger_flag=0
-
-[SERVER] DATA from 102 seq=1, value=31, time=1765568818, danger_flag=0
-
-[SERVER] DATA from 101 seq=1, value=44, time=1765568818, danger_flag=0
-
-[SERVER] DATA from 103 seq=1, value=31, time=1765568818, danger_flag=0
-
-[SERVER] HEARTBEAT from 103, time=1765568819
-
-[SERVER] HEARTBEAT from 101, time=1765568819
-
-[SERVER] HEARTBEAT from 102, time=1765568819
-
-[SERVER] DATA from 103 seq=2, value=2, time=1765568822, danger_flag=0
-
-[SERVER] Sent ACK to device 102
-[SERVER] DATA from 102 seq=2, value=101, time=1765568822, danger_flag=1
-
-[SERVER] DATA from 101 seq=2, value=1, time=1765568822, danger_flag=0
-
-[SERVER] DATA from 101 seq=3, value=1, time=1765568826, danger_flag=0
-
-[SERVER] DATA from 102 seq=3, value=4, time=1765568826, danger_flag=0
-
-[SERVER] DATA from 103 seq=3, value=42, time=1765568826, danger_flag=0
-
-[SERVER] DATA from 102 seq=4, value=13, time=1765568830, danger_flag=0
-
-[SERVER] DATA from 101 seq=4, value=48, time=1765568830, danger_flag=0
-
-[SERVER] DATA from 103 seq=4, value=26, time=1765568830, danger_flag=0
-
-[SERVER] DATA from 103 seq=5, value=37, time=1765568834, danger_flag=0
-
-[SERVER] DATA from 101 seq=5, value=26, time=1765568834, danger_flag=0
-
-[SERVER] DATA from 102 seq=5, value=21, time=1765568834, danger_flag=0
-
-[SERVER] DATA from 101 seq=6, value=41, time=1765568838, danger_flag=0
-
-[SERVER] DATA from 102 seq=6, value=30, time=1765568838, danger_flag=0
-
-[SERVER] DATA from 103 seq=6, value=15, time=1765568838, danger_flag=0
-
-[SERVER] DATA from 101 seq=7, value=44, time=1765568842, danger_flag=0
-
-[SERVER] DATA from 103 seq=7, value=30, time=1765568842, danger_flag=0
-
-[SERVER] Sent ACK to device 102
-[SERVER] DATA from 102 seq=7, value=88, time=1765568842, danger_flag=1
-
-[SERVER] DATA from 103 seq=8, value=13, time=1765568846, danger_flag=0
-
-[SERVER] DATA from 101 seq=8, value=49, time=1765568846, danger_flag=0
-
-[SERVER] DATA from 102 seq=8, value=11, time=1765568846, danger_flag=0
-
-[SERVER] HEARTBEAT from 101, time=1765568849
-
-[SERVER] HEARTBEAT from 103, time=1765568849
-
-[SERVER] HEARTBEAT from 102, time=1765568849
-
-[SERVER] DATA from 103 seq=9, value=20, time=1765568850, danger_flag=0
-
-[SERVER] DATA from 101 seq=9, value=42, time=1765568850, danger_flag=0
-
-[SERVER] DATA from 102 seq=9, value=9, time=1765568850, danger_flag=0
-
-[METRIC] bytes_per_report = 14.00 bytes
-
-[METRIC] packets_received = 30
-
-[METRIC] Packets lost = 0
-
-[METRIC] packets duplicated = 0
-
-[METRIC] CPU_MS_PER_REPORT = 0.06662989999999952
-
-[SERVER] Shutdown complete.
-
+[METRICS]
+Packets received: 44
+Readings written: 44
+Packets lost: 0
+Duplicate packets (total arrivals): 8
+Duplicate sequences: 2
+Duplicate rate: 0.153846
+Bytes per report: 14.00
+CPU_MS_PER_REPORT = 0.076
+----------------------------------------------------------

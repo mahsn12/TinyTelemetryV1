@@ -1,98 +1,21 @@
-[SERVER] Listening on UDP 127.0.0.2:8888...
+[SERVER] Listening on UDP 127.0.0.2:8888
+[SERVER] Writing packets CSV to: /tmp/Networks Project/tests/baseline/packets.csv
+[SERVER] INIT from 101
+[SERVER] INIT from 102
+[SERVER] INIT from 103
+[SERVER] HEARTBEAT from 101
+[SERVER] HEARTBEAT from 102
+[SERVER] HEARTBEAT from 103
+[SERVER] HEARTBEAT from 101
+[SERVER] HEARTBEAT from 102
+[SERVER] HEARTBEAT from 103
 
-[SERVER] INIT from 101, time=1765568531
-
-[SERVER] INIT from 102, time=1765568531
-
-[SERVER] INIT from 103, time=1765568531
-
-[SERVER] DATA from 103 seq=0, value=11, time=1765568533, danger_flag=0
-
-[SERVER] Sent ACK to device 102
-[SERVER] DATA from 102 seq=0, value=70, time=1765568533, danger_flag=1
-
-[SERVER] DATA from 101 seq=0, value=8, time=1765568533, danger_flag=0
-
-[SERVER] DATA from 103 seq=1, value=11, time=1765568537, danger_flag=0
-
-[SERVER] DATA from 101 seq=1, value=28, time=1765568537, danger_flag=0
-
-[SERVER] DATA from 102 seq=1, value=38, time=1765568537, danger_flag=0
-
-[SERVER] HEARTBEAT from 103, time=1765568538
-
-[SERVER] HEARTBEAT from 102, time=1765568538
-
-[SERVER] HEARTBEAT from 101, time=1765568538
-
-[SERVER] DATA from 103 seq=2, value=29, time=1765568541, danger_flag=0
-
-[SERVER] Sent ACK to device 101
-[SERVER] DATA from 101 seq=2, value=93, time=1765568541, danger_flag=1
-
-[SERVER] Sent ACK to device 102
-[SERVER] DATA from 102 seq=2, value=75, time=1765568541, danger_flag=1
-
-[SERVER] Sent ACK to device 103
-[SERVER] DATA from 103 seq=3, value=80, time=1765568545, danger_flag=1
-
-[SERVER] DATA from 101 seq=3, value=32, time=1765568545, danger_flag=0
-
-[SERVER] DATA from 102 seq=3, value=18, time=1765568548, danger_flag=0
-
-[SERVER] DATA from 101 seq=4, value=10, time=1765568549, danger_flag=0
-
-[SERVER] DATA from 103 seq=4, value=47, time=1765568551, danger_flag=0
-
-[SERVER] DATA from 102 seq=4, value=20, time=1765568552, danger_flag=0
-
-[SERVER] DATA from 101 seq=5, value=24, time=1765568553, danger_flag=0
-
-[SERVER] Sent ACK to device 103
-[SERVER] DATA from 103 seq=5, value=66, time=1765568555, danger_flag=1
-
-[SERVER] DATA from 102 seq=5, value=14, time=1765568556, danger_flag=0
-
-[SERVER] DATA from 101 seq=6, value=11, time=1765568557, danger_flag=0
-
-[SERVER] DATA from 103 seq=6, value=29, time=1765568559, danger_flag=0
-
-[SERVER] DATA from 102 seq=6, value=4, time=1765568560, danger_flag=0
-
-[SERVER] DATA from 101 seq=7, value=43, time=1765568561, danger_flag=0
-
-[SERVER] DATA from 103 seq=7, value=43, time=1765568563, danger_flag=0
-
-[SERVER] DATA from 102 seq=7, value=22, time=1765568564, danger_flag=0
-
-[SERVER] DATA from 101 seq=8, value=36, time=1765568565, danger_flag=0
-
-[SERVER] DATA from 103 seq=8, value=7, time=1765568567, danger_flag=0
-
-[SERVER] HEARTBEAT from 101, time=1765568568
-
-[SERVER] HEARTBEAT from 102, time=1765568568
-
-[SERVER] HEARTBEAT from 103, time=1765568568
-
-[SERVER] DATA from 102 seq=8, value=25, time=1765568568, danger_flag=0
-
-[SERVER] DATA from 101 seq=9, value=14, time=1765568569, danger_flag=0
-
-[SERVER] Sent ACK to device 103
-[SERVER] DATA from 103 seq=9, value=68, time=1765568571, danger_flag=1
-
-[SERVER] DATA from 102 seq=9, value=35, time=1765568572, danger_flag=0
-
-[METRIC] bytes_per_report = 14.00 bytes
-
-[METRIC] packets_received = 30
-
-[METRIC] Packets lost = 0
-
-[METRIC] packets duplicated = 0
-
-[METRIC] CPU_MS_PER_REPORT = 0.1149285000000009
-
-[SERVER] Shutdown complete.
-
+[METRICS]
+Packets received: 48
+Readings written: 48
+Packets lost: 0
+Duplicate packets (total arrivals): 0
+Duplicate sequences: 0
+Duplicate rate: 0.000000
+Bytes per report: 14.00
+CPU_MS_PER_REPORT = 0.055
