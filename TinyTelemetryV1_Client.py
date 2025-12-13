@@ -1,163 +1,176 @@
-# TinyTelemetryV1_Client.py
 import socket as skt
 from headers import Header
-import threading, time, struct
-from globals import client_IP, client_port, server_IP, server_port
+import threading, time, struct, os, random, sys
+from globals import server_IP, server_port, client_IP
 from Client import Client
-import random
-import sys
+from collections import deque
+import heapq
 
-# -------------------------
-# Run duration
-# -------------------------
-RUN_DURATION = 50
+RUN_DURATION = int(os.getenv("RUN_DURATION", 50))
 start_time = time.time()
-# Helpers
-# -------------------------
-def custom_random():
-    return random.randint(51,110) if random.random() < 0.10 else random.randint(1,50)
 
-def maybe_recv_ack(sock, expected_addr, timeout=8):
-    """Receive ack with timeout; returns True if valid ack received."""
+SIMULATE_NETEM = os.getenv("SIMULATE_NETEM", "0") == "1"
+SIMULATE_LOSS = float(os.getenv("SIMULATE_LOSS", "0"))
+SIMULATE_DELAY_MS = float(os.getenv("SIMULATE_DELAY_MS", "0"))
+SIMULATE_JITTER_MS = float(os.getenv("SIMULATE_JITTER_MS", "0"))
+
+reorder_buffer = deque()
+reorder_lock = threading.Lock()
+
+# Scheduler queue for delayed sends: list of (send_time, seq, packet, addr)
+send_queue = []
+send_queue_lock = threading.Lock()
+
+# start a background thread to flush scheduled sends
+def _sender_thread(sock):
+    while True:
+        now = time.time()
+        to_send = None
+        with send_queue_lock:
+            if send_queue and send_queue[0][0] <= now:
+                send_time, seq, packet, addr = heapq.heappop(send_queue)
+                to_send = (packet, addr, seq)
+        if to_send:
+            p, a, s = to_send
+            try:
+                sock.sendto(p, a)
+                # indicate release from netem scheduler
+                print(f"[NETEM RELEASE] seq={s} sent to {a}")
+            except Exception:
+                pass
+            continue
+        time.sleep(0.01)
+
+# We'll start the sender thread lazily when first needed
+_sender_started = False
+
+
+def custom_random():
+    return random.randint(51, 110) if random.random() < 0.10 else random.randint(1, 50)
+
+
+def maybe_recv_ack(sock, expected_addr, expected_seq=None, timeout=1.0):
+    prev = sock.gettimeout()
     sock.settimeout(timeout)
     try:
-        ack_packet, addr = sock.recvfrom(1024)
-        if addr == expected_addr:
-            ack_value = int.from_bytes(ack_packet, "big")
-            return ack_value == 1
-    except skt.timeout:
+        pkt, a = sock.recvfrom(1024)
+        if a != expected_addr:
+            return False
+        if len(pkt) >= 5:
+            t = pkt[0]
+            seq = struct.unpack('!I', pkt[1:5])[0]
+            return t == 1 and (expected_seq is None or seq == expected_seq)
         return False
     except Exception:
         return False
     finally:
-        sock.settimeout(None)
+        sock.settimeout(prev)
 
-# -------------------------
-# Threads
-# -------------------------
-def send_heartbeat(client_obj):
-    time.sleep(5)
-    while (time.time() - start_time < RUN_DURATION):
-        header = Header(device_id=client_obj.device_id, msg_type=0)
-        hb_packet = header.heartbeat()
+
+def netem_send(sock, packet, addr, seq=None):
+    """Send or schedule a send. Returns True if sent or scheduled, False if dropped."""
+    global _sender_started
+    # Simulated loss
+    if SIMULATE_NETEM and SIMULATE_LOSS > 0 and random.random() < SIMULATE_LOSS:
+        print(f"[SIM NETEM] DROPPED seq={seq}")
+        return False
+
+    # If not simulating delay, send immediately
+    if not (SIMULATE_NETEM and SIMULATE_DELAY_MS > 0 and seq is not None):
         try:
-            client_obj.sock.sendto(hb_packet, (server_IP, server_port))
+            sock.sendto(packet, addr)
+            return True
         except Exception:
-            break
-        print(f"[CLIENT {client_obj.device_id}] Sent HEARTBEAT")
-        # sleep in 1s increments but stop if duration expired
-        for _ in range(30):
-            if time.time() - start_time >= RUN_DURATION:
-                break
-            time.sleep(1)
+            return False
 
-def client_thread(client_obj):
-    seq_num = 0
+    # Ensure sender thread running
+    if not _sender_started:
+        t = threading.Thread(target=_sender_thread, args=(sock,), daemon=True)
+        t.start()
+        _sender_started = True
 
-    # INIT
-    try:
-        init_header = Header(device_id=client_obj.device_id, msg_type=2)
-        init_packet = init_header.Pack_Init()
-        client_obj.sock.sendto(init_packet, (server_IP, server_port))
-        print(f"[INFO] Client {client_obj.device_id} sent INIT")
-    except Exception as e:
-        print(f"[CLIENT {client_obj.device_id}] INIT send error: {e}")
+    # Compute target send time using base delay + jitter
+    jitter = random.uniform(-SIMULATE_JITTER_MS, SIMULATE_JITTER_MS)
+    delay_ms = SIMULATE_DELAY_MS + jitter
+    # occasional reordering by increasing delay for this packet
+    if random.random() < 0.3:
+        delay_ms += random.uniform(0, SIMULATE_DELAY_MS * 2)
 
-    time.sleep(2)
+    send_time = time.time() + max(0.0, delay_ms / 1000.0)
 
-    hb_thread = threading.Thread(target=send_heartbeat, args=(client_obj,), daemon=True)
-    hb_thread.start()
+    with send_queue_lock:
+        heapq.heappush(send_queue, (send_time, seq if seq is not None else 0, packet, addr))
 
-    # DATA LOOP
-    while (time.time() - start_time < RUN_DURATION):
-        try:
-            data = custom_random()
-            danger_flag = 0 if data < 60 else 1
+    # log that packet was scheduled (held)
+    print(f"[NETEM SCHEDULE] seq={seq} delay_ms={delay_ms:.1f} target={send_time:.3f}")
+    return True
 
-            header = Header(
-                device_id=client_obj.device_id,
-                seq_num=seq_num,
-                flags=danger_flag,
-                msg_type=1
-            )
 
-            header_bytes = header.Pack_Message()
-            data_bytes = struct.pack('!H', data)
-            packet = header_bytes + data_bytes
+def send_heartbeat(client):
+    time.sleep(5)
+    while time.time() - start_time < RUN_DURATION:
+        hb = Header(device_id=client.device_id, msg_type=0).heartbeat()
+        netem_send(client.sock, hb, (server_IP, server_port))
+        time.sleep(30)
 
-            # send packet (may fail if socket closed)
-            client_obj.sock.sendto(packet, (server_IP, server_port))
 
-            # Only danger packets require ACK
-            if danger_flag == 1:
-                ack_received = False
-                ack_start = time.time()
+def client_thread(client):
+    seq = 0
 
-                while not ack_received and (time.time() - ack_start < 30) and (time.time() - start_time < RUN_DURATION):
-                    # wait for ack with timeout
-                    got = maybe_recv_ack(client_obj.sock, (server_IP, server_port), timeout=8)
-                    if got:
-                        print(f"[CLIENT {client_obj.device_id}] Valid ACK received")
-                        ack_received = True
-                        break
-                    print(f"[CLIENT {client_obj.device_id}] Timeout. Resending danger packet.")
-                    try:
-                        client_obj.sock.sendto(packet, (server_IP, server_port))
-                    except Exception:
-                        # socket closed or error: break out
-                        break
+    init = Header(device_id=client.device_id, msg_type=2).Pack_Init()
+    netem_send(client.sock, init, (server_IP, server_port))
+    print(f"[CLIENT {client.device_id}] INIT sent")
 
-                if not ack_received:
-                    print(f"[CLIENT {client_obj.device_id}] No ACK for 30 seconds. Giving up.")
+    threading.Thread(target=send_heartbeat, args=(client,), daemon=True).start()
 
-            print(f"[CLIENT {client_obj.device_id}] Sent DATA seq={seq_num}, value={data}, flag={danger_flag}")
+    while time.time() - start_time < RUN_DURATION:
+        value = custom_random()
+        danger = 1 if value >= 60 else 0
 
-            seq_num += 1
+        h = Header(device_id=client.device_id, seq_num=seq, msg_type=1, flags=(1 if danger else 0))
+        pkt = h.Pack_Message() + struct.pack("!H", value)
 
-            # sleep in small increments but stop early if duration expired
-            for _ in range(4):
-                if time.time() - start_time >= RUN_DURATION:
+        sent = netem_send(client.sock, pkt, (server_IP, server_port), seq)
+
+        if danger:
+            attempts = 0
+            timeout = 1.0
+            max_attempts = 5
+            while attempts < max_attempts and time.time() - start_time < RUN_DURATION:
+                got = maybe_recv_ack(client.sock, (server_IP, server_port), expected_seq=seq, timeout=timeout)
+                if got:
+                    print(f"[CLIENT {client.device_id}] ACK seq={seq}")
                     break
-                time.sleep(1)
+                attempts += 1
+                timeout = min(4.0, timeout * 2)
+                sent = netem_send(client.sock, pkt, (server_IP, server_port), seq)
+            else:
+                print(f"[CLIENT {client.device_id}] WARNING: no ACK for seq={seq} after {attempts} attempts")
 
-        except Exception as e:
-            # If socket closed or other error during shutdown, just break
-            # print(f"[CLIENT {client_obj.device_id}] Error in main loop: {e}")
-            break
+        # Log only when packet was actually sent/scheduled
+        if sent:
+            print(f"[CLIENT {client.device_id}] DATA seq={seq} val={value} danger={danger}")
+        seq += 1
+        time.sleep(4)
 
-    # cleanup for this client thread
     try:
-        client_obj.sock.close()
+        client.sock.close()
     except Exception:
         pass
-    print(f"[CLIENT {client_obj.device_id}] Shutdown cleanly.")
+    print(f"[CLIENT {client.device_id}] Shutdown cleanly")
 
-# -------------------------
-# Create clients & start threads
-# -------------------------
 
-c1 = Client(device_id=101, client_ip='127.0.0.1', client_port=0)
-time.sleep(2)
-c2 = Client(device_id=102, client_ip='127.0.0.1', client_port=0)
-time.sleep(6)
-c3 = Client(device_id=103, client_ip='127.0.0.1', client_port=0)
+clients = [
+    Client(101, client_IP, 0),
+    Client(102, client_IP, 0),
+    Client(103, client_IP, 0),
+]
 
-t1 = threading.Thread(target=client_thread, args=(c1,), daemon=True)
-t2 = threading.Thread(target=client_thread, args=(c2,), daemon=True)
-t3 = threading.Thread(target=client_thread, args=(c3,), daemon=True)
+for c in clients:
+    threading.Thread(target=client_thread, args=(c,), daemon=True).start()
+    time.sleep(0.5)
 
-t1.start()
-t2.start()
-t3.start()
+while time.time() - start_time < RUN_DURATION:
+    time.sleep(1)
 
-# keep main alive until run duration expires
-try:
-    while time.time() - start_time < RUN_DURATION:
-        time.sleep(1)
-except KeyboardInterrupt:
-    pass
-
-# give threads a moment to finish
-time.sleep(1)
-print("[aCLIENTS] Run duration complete. Exiting.")
 sys.exit(0)

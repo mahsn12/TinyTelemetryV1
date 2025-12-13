@@ -12,7 +12,9 @@ class Client:
 
 
 
+    @staticmethod
     def create_client(ip, port, device_id):
-        return Client(device_id,ip,port)    
+        return Client(device_id, ip, port)
+
 
 

@@ -10,7 +10,14 @@ class Header:
         self.seq_num = seq_num
         self.msg_type = msg_type
         self.flags = flags
-        self.timestamp = int(time.time())
+        # Use provided timestamp if given, otherwise current time
+        if timestamp is None:
+            self.timestamp = int(time.time())
+        else:
+            try:
+                self.timestamp = int(timestamp)
+            except Exception:
+                self.timestamp = int(time.time())
 
     def Pack_Message(self):
         return struct.pack(

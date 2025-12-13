@@ -29,7 +29,7 @@ else
 fi
 
 echo "Starting server..."
-( cd "$PROJECT_DIR" && env RUN_DURATION="$DURATION" $SERVER_CMD 2>&1 | tee "$TEST_DIR/server.log" ) &
+( cd "$PROJECT_DIR" && env RUN_DURATION="$DURATION" $SERVER_CMD 2>&1 ) &
 SERVER_PID=$!
 
 SERVER_PORT=8888
@@ -41,9 +41,9 @@ done
 
 echo "Starting client..."
 if [ "$SIMULATE_NETEM" -eq 1 ]; then
-    ( cd "$PROJECT_DIR" && env RUN_DURATION="$DURATION" SIMULATE_NETEM=1 SIMULATE_LOSS=0.05 $CLIENT_CMD 2>&1 | tee "$TEST_DIR/client.log" ) &
+    ( cd "$PROJECT_DIR" && env RUN_DURATION="$DURATION" SIMULATE_NETEM=1 SIMULATE_LOSS=0.05 $CLIENT_CMD 2>&1 ) &
 else
-    ( cd "$PROJECT_DIR" && env RUN_DURATION="$DURATION" SIMULATE_NETEM=0 $CLIENT_CMD 2>&1 | tee "$TEST_DIR/client.log" ) &
+    ( cd "$PROJECT_DIR" && env RUN_DURATION="$DURATION" SIMULATE_NETEM=0 $CLIENT_CMD 2>&1 ) &
 fi
 CLIENT_PID=$!
 
