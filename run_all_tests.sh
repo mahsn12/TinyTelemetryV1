@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DURATION=${DURATION:-70}
+DURATION=${DURATION:-80}
 WAIT_BETWEEN=${WAIT_BETWEEN:-5}
 
 echo "====================================="

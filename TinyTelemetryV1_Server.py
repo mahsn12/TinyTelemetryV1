@@ -3,7 +3,7 @@ from headers import Header
 import csv, time, struct, os
 from globals import server_IP, server_port
 
-RUN_DURATION = int(os.getenv("RUN_DURATION", 62))
+RUN_DURATION = int(os.getenv("RUN_DURATION", 75))
 
 # -------------------------
 # Socket setup
