@@ -1,25 +1,25 @@
 [SERVER] Listening on UDP 127.0.0.2:8888
 [SERVER] Writing packets CSV to: /tmp/Networks Project/tests/delay_jitter/packets.csv
 [SERVER] INIT from 101
+[SNAPSHOT @ 10s] bytes=14.00, dup=0.0000, loss=0, cpu=0.035
 [SERVER] INIT from 102
 [SERVER] INIT from 103
 [SERVER] HEARTBEAT from 101
 [SERVER] HEARTBEAT from 102
 [SERVER] HEARTBEAT from 103
+[SNAPSHOT @ 30s] bytes=112.00, dup=1.0000, loss=0, cpu=0.714
 [SERVER] HEARTBEAT from 101
 [SERVER] HEARTBEAT from 102
 [SERVER] HEARTBEAT from 103
-[SERVER] HEARTBEAT from 101
-[SERVER] HEARTBEAT from 102
-[SERVER] HEARTBEAT from 103
+[SNAPSHOT @ 60s] bytes=32.20, dup=0.6000, loss=0, cpu=0.252
 
 [METRICS]
-Packets received: 43
-Readings written: 43
+Packets received: 38
+Readings written: 38
 Packets lost: 0
 Duplicate packets (total arrivals): 15
 Duplicate sequences: 3
-Duplicate rate: 0.258621
+Duplicate rate: 0.283019
 Bytes per report: 14.00
-CPU_MS_PER_REPORT = 0.078
+CPU_MS_PER_REPORT = 0.087
 ----------------------------------------------------------
