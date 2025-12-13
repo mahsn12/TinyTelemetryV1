@@ -1,79 +1,69 @@
+[SIM NETEM] DROPPED seq=None
 [CLIENT 101] INIT sent
-[CLIENT 101] DATA seq=0 val=31 danger=0
+[CLIENT 101] DATA seq=0 val=23 danger=0
 [SIM NETEM] DROPPED seq=None
 [CLIENT 102] INIT sent
-[CLIENT 102] ACK seq=0
-[CLIENT 102] DATA seq=0 val=100 danger=1
+[SIM NETEM] DROPPED seq=0
 [CLIENT 103] INIT sent
-[CLIENT 103] DATA seq=0 val=25 danger=0
-[CLIENT 101] ACK seq=1
-[CLIENT 101] DATA seq=1 val=94 danger=1
-[CLIENT 102] DATA seq=1 val=17 danger=0
-[CLIENT 103] DATA seq=1 val=45 danger=0
-[CLIENT 101] DATA seq=2 val=3 danger=0
-[CLIENT 102] DATA seq=2 val=21 danger=0
-[CLIENT 103] DATA seq=2 val=10 danger=0
-[CLIENT 101] ACK seq=3
-[CLIENT 101] DATA seq=3 val=77 danger=1
-[CLIENT 102] DATA seq=3 val=10 danger=0
-[CLIENT 103] DATA seq=3 val=8 danger=0
-[CLIENT 101] DATA seq=4 val=14 danger=0
-[CLIENT 102] DATA seq=4 val=26 danger=0
-[SIM NETEM] DROPPED seq=4
-[CLIENT 101] DATA seq=5 val=22 danger=0
-[CLIENT 102] DATA seq=5 val=3 danger=0
-[CLIENT 103] DATA seq=5 val=27 danger=0
-[CLIENT 101] DATA seq=6 val=10 danger=0
-[SIM NETEM] DROPPED seq=6
-[CLIENT 103] DATA seq=6 val=37 danger=0
-[CLIENT 101] DATA seq=7 val=9 danger=0
-[CLIENT 102] DATA seq=7 val=24 danger=0
-[SIM NETEM] DROPPED seq=7
-[CLIENT 101] ACK seq=8
-[CLIENT 101] DATA seq=8 val=73 danger=1
-[CLIENT 102] DATA seq=8 val=13 danger=0
-[CLIENT 103] DATA seq=8 val=36 danger=0
-[CLIENT 101] DATA seq=9 val=23 danger=0
-[CLIENT 102] DATA seq=9 val=38 danger=0
-[CLIENT 103] DATA seq=9 val=3 danger=0
-[CLIENT 101] DATA seq=10 val=38 danger=0
-[CLIENT 102] DATA seq=10 val=28 danger=0
-[CLIENT 103] DATA seq=10 val=15 danger=0
-[CLIENT 101] DATA seq=11 val=21 danger=0
-[CLIENT 102] DATA seq=11 val=5 danger=0
-[CLIENT 103] DATA seq=11 val=34 danger=0
-[CLIENT 101] DATA seq=12 val=18 danger=0
-[CLIENT 102] ACK seq=12
-[CLIENT 102] DATA seq=12 val=83 danger=1
-[CLIENT 103] DATA seq=12 val=32 danger=0
-[CLIENT 101] DATA seq=13 val=45 danger=0
-[CLIENT 102] DATA seq=13 val=10 danger=0
-[CLIENT 103] DATA seq=13 val=50 danger=0
-[CLIENT 101] DATA seq=14 val=14 danger=0
-[CLIENT 102] ACK seq=14
-[CLIENT 102] DATA seq=14 val=67 danger=1
-[CLIENT 103] DATA seq=14 val=41 danger=0
-[CLIENT 101] ACK seq=15
-[CLIENT 101] DATA seq=15 val=77 danger=1
-[CLIENT 102] DATA seq=15 val=12 danger=0
-[CLIENT 103] DATA seq=15 val=21 danger=0
-[CLIENT 101] DATA seq=16 val=22 danger=0
-[CLIENT 102] DATA seq=16 val=36 danger=0
-[CLIENT 103] DATA seq=16 val=48 danger=0
-[CLIENT 101] DATA seq=17 val=7 danger=0
-[CLIENT 102] DATA seq=17 val=1 danger=0
-[SIM NETEM] DROPPED seq=17
-[CLIENT 101] Missed heartbeat reply 1
-[CLIENT 102] Missed heartbeat reply 1
-[CLIENT 103] Missed heartbeat reply 1
-[CLIENT 101] DATA seq=18 val=25 danger=0
-[SIM NETEM] DROPPED seq=18
-[CLIENT 103] DATA seq=18 val=11 danger=0
-[CLIENT 101] DATA seq=19 val=37 danger=0
-[CLIENT 102] DATA seq=19 val=40 danger=0
-[CLIENT 103] DATA seq=19 val=23 danger=0
+[CLIENT 103] DATA seq=0 val=13 danger=0
+[SIM NETEM] DROPPED seq=1
+[CLIENT 102] DATA seq=1 val=48 danger=0
+[CLIENT 103] DATA seq=1 val=25 danger=0
+[CLIENT 101] ACK seq=2
+[CLIENT 101] DATA seq=2 val=86 danger=1
+[CLIENT 102] DATA seq=2 val=14 danger=0
+[CLIENT 103] DATA seq=2 val=41 danger=0
+[CLIENT 101] DATA seq=3 val=11 danger=0
+[CLIENT 102] DATA seq=3 val=38 danger=0[CLIENT 103] DATA seq=3 val=11 danger=0
+
+[CLIENT 101] DATA seq=4 val=15 danger=0
+[CLIENT 102] DATA seq=4 val=43 danger=0
+[CLIENT 103] ACK seq=4
+[CLIENT 103] DATA seq=4 val=88 danger=1
+[CLIENT 101] DATA seq=5 val=12 danger=0
+[CLIENT 102] DATA seq=5 val=7 danger=0
+[CLIENT 103] DATA seq=5 val=39 danger=0
+[CLIENT 101] DATA seq=6 val=36 danger=0
+[CLIENT 103] DATA seq=6 val=4 danger=0
+[CLIENT 102] DATA seq=6 val=39 danger=0
+[CLIENT 101] DATA seq=7 val=50 danger=0
+[CLIENT 103] DATA seq=7 val=14 danger=0[CLIENT 102] DATA seq=7 val=24 danger=0
+
+[CLIENT 101] DATA seq=8 val=5 danger=0
+[CLIENT 102] DATA seq=8 val=5 danger=0[CLIENT 103] DATA seq=8 val=20 danger=0
+
+[CLIENT 101] DATA seq=9 val=52 danger=0
+[CLIENT 102] DATA seq=9 val=17 danger=0
+[CLIENT 103] DATA seq=9 val=44 danger=0
+[CLIENT 101] DATA seq=10 val=30 danger=0
+[CLIENT 102] DATA seq=10 val=14 danger=0
+[CLIENT 103] DATA seq=10 val=12 danger=0
+[CLIENT 101] DATA seq=11 val=20 danger=0
+[CLIENT 102] ACK seq=11
+[CLIENT 102] DATA seq=11 val=95 danger=1
+[CLIENT 103] DATA seq=11 val=4 danger=0
+[CLIENT 101] DATA seq=12 val=40 danger=0
+[CLIENT 102] DATA seq=12 val=6 danger=0
+[CLIENT 103] DATA seq=12 val=3 danger=0
+[CLIENT 101] DATA seq=13 val=20 danger=0
+[CLIENT 102] ACK seq=13
+[CLIENT 102] DATA seq=13 val=68 danger=1
+[CLIENT 103] DATA seq=13 val=41 danger=0
+[CLIENT 101] DATA seq=14 val=21 danger=0
+[CLIENT 102] DATA seq=14 val=4 danger=0
+[CLIENT 103] DATA seq=14 val=15 danger=0
+[CLIENT 102] DATA seq=15 val=11 danger=0
+[CLIENT 101] DATA seq=15 val=23 danger=0
+[CLIENT 103] DATA seq=15 val=36 danger=0
+[CLIENT 102] DATA seq=16 val=49 danger=0
+[CLIENT 101] DATA seq=16 val=34 danger=0
+[CLIENT 103] DATA seq=16 val=47 danger=0
+[CLIENT 102] DATA seq=17 val=14 danger=0
+[CLIENT 101] DATA seq=17 val=49 danger=0
+[CLIENT 103] DATA seq=17 val=43 danger=0
+[CLIENT 101] DATA seq=18 val=36 danger=0
+[CLIENT 103] DATA seq=18 val=25 danger=0
+[CLIENT 101] DATA seq=19 val=31 danger=0
+[CLIENT 103] DATA seq=19 val=24 danger=0
 [CLIENT 101] DATA seq=20 val=31 danger=0
-[CLIENT 102] DATA seq=20 val=6 danger=0
-[CLIENT 103] DATA seq=20 val=37 danger=0
-[CLIENT 101] DATA seq=21 val=8 danger=0
-[CLIENT 102] Shutdown cleanly
+[CLIENT 103] DATA seq=20 val=4 danger=0

@@ -2,8 +2,19 @@ import socket as skt
 from headers import Header
 import csv, time, struct, os
 from globals import server_IP, server_port
+import matplotlib.pyplot as plt
 
 RUN_DURATION = int(os.getenv("RUN_DURATION", 75))
+
+
+snapshot_points = [10, 30, 60]
+snapshots_taken = set()
+
+snap_time = []
+snap_bytes = []
+snap_dup_rate = []
+snap_loss = []
+snap_cpu = []
 
 # -------------------------
 # Socket setup
@@ -219,6 +230,23 @@ while time.time() - start_time < RUN_DURATION:
     cpu_end = time.process_time()
     cpu_counts += 1
     cpu_total_time += (cpu_end - cpu_start)
+    elapsed = int(time.time() - start_time)
+
+    for t in snapshot_points:
+        if elapsed >= t and t not in snapshots_taken:
+            snapshots_taken.add(t)
+
+            cur_dup_rate = dup_total / max((readings_written + dup_total), 1)
+            cur_bytes = packets_bytes_total / max(readings_written, 1)
+            cur_cpu = (cpu_total_time / max(readings_written, 1)) * 1000
+
+            snap_time.append(t)
+            snap_bytes.append(cur_bytes)
+            snap_dup_rate.append(cur_dup_rate)
+            snap_loss.append(loss_count)
+            snap_cpu.append(cur_cpu)
+
+            print(f"[SNAPSHOT @ {t}s] bytes={cur_bytes:.2f}, dup={cur_dup_rate:.4f}, loss={loss_count}, cpu={cur_cpu:.3f}")
 
     # safety: if buffer grows excessively large, flush the earliest batch of 10 by arrival time
     if len(buffers[dev]) > BUFFER_THRESHOLD * 10:
@@ -300,6 +328,11 @@ for dev in list(buffers.keys()):
                 pkt[4],
                 pkt[5]
             ])
+            elapsed = int(time.time() - start_time)
+
+            elapsed = int(time.time() - start_time)
+
+
 
 # =====================================================
 # Metrics
@@ -317,6 +350,60 @@ print(f"Duplicate rate: {dup_rate:.6f}")
 # bytes per report (per reading)
 bytes_per_report = packets_bytes_total / max(readings_written, 1)
 print(f"Bytes per report: {bytes_per_report:.2f}")
-print(f"CPU_MS_PER_REPORT = {(cpu_total_time / max(cpu_counts,1)) * 1000:.3f}")
+print(f"CPU_MS_PER_REPORT = {(cpu_total_time / max(readings_written,1)) * 1000:.3f}")
 
 print("----------------------------------------------------------")
+
+
+
+# =====================================================
+# Derived metric (REAL)
+# =====================================================
+cpu_ms_per_report = (cpu_total_time / max(readings_written, 1)) * 1000
+
+# =====================================================
+# 1) Bytes per Report
+# =====================================================
+plt.figure()
+plt.plot(snap_time, snap_bytes, marker='o')
+plt.xlabel("Time (seconds)")
+plt.ylabel("Bytes per Report")
+plt.title("Bytes per Report vs Time")
+plt.grid(True)
+plt.tight_layout()
+plt.savefig("bytes_per_report_over_time.png")
+plt.close()
+
+plt.figure()
+plt.plot(snap_time, snap_dup_rate, marker='o')
+plt.xlabel("Time (seconds)")
+plt.ylabel("Duplicate Rate")
+plt.title("Duplicate Rate vs Time")
+plt.grid(True)
+plt.tight_layout()
+plt.savefig("duplicate_rate_over_time.png")
+plt.close()
+
+
+plt.figure()
+plt.plot(snap_time, snap_loss, marker='o')
+plt.xlabel("Time (seconds)")
+plt.ylabel("Packets Lost")
+plt.title("Packet Loss vs Time")
+plt.grid(True)
+plt.tight_layout()
+plt.savefig("packet_loss_over_time.png")
+plt.close()
+
+
+
+plt.figure()
+plt.plot(snap_time, snap_cpu, marker='o')
+plt.xlabel("Time (seconds)")
+plt.ylabel("CPU ms per Report")
+plt.title("CPU Time per Report vs Time")
+plt.grid(True)
+plt.tight_layout()
+plt.savefig("cpu_ms_per_report_over_time.png")
+plt.close()
+

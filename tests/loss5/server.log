@@ -1,21 +1,26 @@
 [SERVER] Listening on UDP 127.0.0.2:8888
 [SERVER] Writing packets CSV to: /tmp/Networks Project/tests/loss5/packets.csv
-[SERVER] INIT from 101
+[SNAPSHOT @ 10s] bytes=14.00, dup=0.0000, loss=0, cpu=0.026
 [SERVER] INIT from 103
 [SERVER] HEARTBEAT from 101
 [SERVER] HEARTBEAT from 102
 [SERVER] HEARTBEAT from 103
+[SNAPSHOT @ 30s] bytes=154.00, dup=0.0000, loss=0, cpu=0.456
+[SERVER] HEARTBEAT from 101
+[SERVER] HEARTBEAT from 102
+[SERVER] HEARTBEAT from 103
+[SNAPSHOT @ 60s] bytes=16.33, dup=0.0000, loss=2, cpu=0.067
 [SERVER] HEARTBEAT from 101
 [SERVER] HEARTBEAT from 102
 [SERVER] HEARTBEAT from 103
 
 [METRICS]
-Packets received: 45
-Readings written: 45
-Packets lost: 3
+Packets received: 49
+Readings written: 49
+Packets lost: 2
 Duplicate packets (total arrivals): 0
 Duplicate sequences: 0
 Duplicate rate: 0.000000
 Bytes per report: 14.00
-CPU_MS_PER_REPORT = 0.067
-_______________________________________________________
+CPU_MS_PER_REPORT = 0.053
+----------------------------------------------------------
